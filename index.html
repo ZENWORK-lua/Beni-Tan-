@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ali Poyraz</title>
+    <title>Ali Poyraz | Profil</title>
     
+    <!-- Google Fonts & FontAwesome İkonları -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
+            /* Renk Paleti: Premium Yeşil ve Krem Tonları */
             --bg-main: #0c140e;          
             --card-bg: #142018;          
             --card-border: #1e3024;      
@@ -18,17 +21,12 @@
             --text-muted: #9ab0a0;       
             --accent-green: #2e5238;     
             --accent-brown: #cfbda8;     
-            --accent-brown-hover: #b8a48f;
+            --nav-bg: rgba(20, 32, 24, 0.85);
+            /* Apple Tarzı İpeksi Geçiş */
             --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg-main);
@@ -37,489 +35,361 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
             background-image: radial-gradient(circle at 50% 0%, #15261b 0%, var(--bg-main) 70%);
             background-attachment: fixed;
-            overflow-x: hidden;
+            overflow: hidden; /* Dışarı taşmaları engelle */
         }
 
-        /* Ana Kart - Esneyen Yapı */
-        .card {
+        /* Ana Uygulama Çerçevesi */
+        .app-container {
             width: 100%;
-            max-width: 360px; /* İlk aşamada küçük karemsi */
+            max-width: 360px; /* İlk açılışta karemsi */
+            height: 400px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 28px;
-            padding: 24px;
+            border-radius: 32px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(20px);
             position: relative;
-            transition: max-width 0.6s var(--apple-ease), padding 0.6s var(--apple-ease);
+            transition: max-width 0.7s var(--apple-ease), height 0.7s var(--apple-ease), border-radius 0.7s var(--apple-ease);
+            overflow: hidden;
         }
 
-        /* Genişlemiş Ana Profil Modu */
-        .card.expanded {
-            max-width: 440px;
+        /* Genişlemiş Uygulama Modu */
+        .app-container.expanded {
+            max-width: 420px;
+            height: 650px;
+            border-radius: 40px;
         }
 
-        /* Ekranın altından çıkıp yuvarlatılmış kareye dönüşme animasyonu */
-        .anim-pop {
-            animation: popUp 0.85s var(--apple-ease) forwards;
-        }
-
+        /* Giriş Animasyonu */
+        .anim-pop { animation: popUp 0.9s var(--apple-ease) forwards; }
         @keyframes popUp {
-            0% {
-                transform: translateY(100vh) scale(0.1);
-                border-radius: 50%;
-                opacity: 0;
-            }
-            60% {
-                transform: translateY(-8px) scale(1.02);
-                border-radius: 36px;
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(0) scale(1);
-                border-radius: 28px;
-                opacity: 1;
-            }
+            0% { transform: translateY(100vh) scale(0.5); border-radius: 50%; opacity: 0; }
+            60% { transform: translateY(-10px) scale(1.02); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
         }
 
-        /* Aşama İçerikleri */
-        .content-step {
-            transition: opacity 0.35s var(--apple-ease), transform 0.35s var(--apple-ease);
-        }
-
-        .fade-out {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-
-        .fade-in {
-            animation: fadeInStep 0.45s var(--apple-ease) forwards;
-        }
-
-        @keyframes fadeInStep {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Gizli Eleman */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Karşılama Formu */
-        .intro-box {
+        /* İçerik Katmanları (Aşamalar) */
+        .layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            transition: opacity 0.4s var(--apple-ease), transform 0.4s var(--apple-ease);
         }
+        .layer.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; }
 
-        .intro-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            text-align: center;
-            color: var(--text-cream);
-        }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .field-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
+        /* --- GİRİŞ EKRANI (LAYER 1) --- */
+        .intro-content { justify-content: center; gap: 20px; }
+        .intro-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
+        .field-group { display: flex; flex-direction: column; gap: 8px; }
+        .field-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+        
         .input-field, .textarea-field {
-            width: 100%;
-            background: rgba(12, 20, 14, 0.7);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 12px 14px;
-            color: var(--text-cream);
-            font-size: 0.88rem;
-            outline: none;
+            width: 100%; background: rgba(12, 20, 14, 0.7);
+            border: 1px solid var(--card-border); border-radius: 16px;
+            padding: 14px 16px; color: var(--text-cream); font-size: 0.95rem; outline: none;
             transition: all 0.25s var(--apple-ease);
         }
-
         .input-field:focus, .textarea-field:focus {
-            border-color: var(--accent-brown);
-            background: rgba(12, 20, 14, 0.95);
-            box-shadow: 0 0 0 3px rgba(207, 189, 168, 0.12);
+            border-color: var(--accent-brown); background: rgba(12, 20, 14, 0.95);
         }
 
-        /* Poyraz ile tanıştınız mı? Seçenekleri */
-        .radio-options {
-            display: flex;
-            gap: 8px;
-        }
-
+        /* Radyo Butonlar */
+        .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .radio-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(12, 20, 14, 0.5);
-            border: 1px solid var(--card-border);
-            padding: 10px 8px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            transition: all 0.25s var(--apple-ease);
-            user-select: none;
+            background: rgba(12, 20, 14, 0.5); border: 1px solid var(--card-border);
+            padding: 12px 10px; border-radius: 14px; text-align: center; cursor: pointer;
+            font-size: 0.85rem; color: var(--text-muted); transition: all 0.25s var(--apple-ease);
         }
+        .radio-btn.active { border-color: var(--accent-brown); background: rgba(207, 189, 168, 0.12); color: var(--text-cream); font-weight: 600; }
 
-        .radio-btn.active {
-            border-color: var(--accent-brown);
-            background: rgba(207, 189, 168, 0.12);
-            color: var(--text-cream);
-            font-weight: 600;
+        .primary-btn {
+            background: var(--accent-brown); color: var(--bg-main);
+            border: none; border-radius: 16px; padding: 16px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s var(--apple-ease); width: 100%; margin-top: 10px;
         }
+        .primary-btn:active { transform: scale(0.96); }
 
-        /* Profil ve Ana İçerik */
-        .profile-section {
-            text-align: center;
-            margin-bottom: 20px;
+        /* --- ANA UYGULAMA (LAYER 2) --- */
+        .main-app { padding: 0; }
+        .top-bar { padding: 24px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .welcome-text { font-size: 0.9rem; color: var(--accent-brown); font-weight: 600; }
+        
+        /* Menü İçerik Alanı (Sekmeler) */
+        .view-container {
+            position: relative; flex: 1; overflow: hidden;
+            width: 100%; height: calc(100% - 140px);
         }
-
-        .welcome-badge {
-            font-size: 0.85rem;
-            color: var(--accent-brown);
-            font-weight: 600;
-            margin-bottom: 8px;
-            letter-spacing: 0.01em;
+        
+        .tab-view {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 10px 24px; overflow-y: auto;
+            opacity: 0; transform: translateX(20px); pointer-events: none;
+            transition: all 0.5s var(--apple-ease);
         }
+        .tab-view.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .tab-view.prev { transform: translateX(-20px); }
 
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--accent-green);
-            border: 2px solid var(--accent-brown);
-            margin: 0 auto 12px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--text-cream);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        /* Sekme İçerikleri Tasarımı */
+        /* 1. Profil */
+        .profile-header { text-align: center; margin-top: 10px; }
+        .avatar-lg { width: 96px; height: 96px; border-radius: 32px; background: var(--accent-green); border: 2px solid var(--accent-brown); margin: 0 auto 16px auto; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--text-cream); }
+        .name-lg { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
+        .age-badge { display: inline-block; background: rgba(207, 189, 168, 0.1); color: var(--accent-brown); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
+        .bio-text { text-align: center; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-top: 16px; }
+
+        /* 2. Hobiler */
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-cream); display: flex; align-items: center; gap: 8px; }
+        .hobby-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hobby-chip { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; font-weight: 500; }
+        .hobby-chip i { color: var(--accent-brown); }
+        .music-card { background: linear-gradient(135deg, rgba(46, 82, 56, 0.3) 0%, rgba(12, 20, 14, 0.1) 100%); border: 1px solid var(--card-border); padding: 16px; border-radius: 20px; margin-top: 20px; display: flex; align-items: center; gap: 16px; }
+        .music-icon { width: 40px; height: 40px; background: var(--accent-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-main); font-size: 1.2rem; }
+
+        /* 3. Duman (Kedi) */
+        .cat-card { width: 100%; border-radius: 24px; overflow: hidden; border: 1px solid var(--card-border); position: relative; }
+        .cat-img { width: 100%; height: 260px; object-fit: cover; display: block; }
+        .cat-info { padding: 16px; background: rgba(12, 20, 14, 0.8); backdrop-filter: blur(10px); position: absolute; bottom: 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); }
+        .cat-name { font-size: 1.2rem; font-weight: 700; color: var(--text-cream); }
+        .cat-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* Alt Navigasyon Barı */
+        .bottom-nav {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); height: 64px;
+            background: var(--nav-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border); border-radius: 24px;
+            display: flex; justify-content: space-around; align-items: center; padding: 0 10px;
         }
-
-        .name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-cream);
+        .nav-item {
+            width: 48px; height: 48px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 1.2rem; cursor: pointer;
+            transition: all 0.3s var(--apple-ease);
         }
+        .nav-item.active { background: rgba(207, 189, 168, 0.15); color: var(--accent-brown); transform: translateY(-2px); }
 
-        .bio {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            line-height: 1.45;
-            margin-top: 8px;
-        }
-
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            margin-top: 12px;
-        }
-
-        .tag {
-            background: rgba(207, 189, 168, 0.08);
-            border: 1px solid rgba(207, 189, 168, 0.15);
-            color: var(--accent-brown);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--card-border);
-            margin: 20px 0;
-        }
-
-        /* Mesaj Kutusu */
-        .message-box {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .textarea-field {
-            resize: none;
-            height: 85px;
-        }
-
-        .anon-option {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(12, 20, 14, 0.4);
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(30, 48, 36, 0.5);
-            cursor: pointer;
-        }
-
-        .anon-text {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 22px;
-        }
-
-        .switch input { opacity: 0; width: 0; height: 0; }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #1e3024;
-            transition: .3s var(--apple-ease);
-            border-radius: 22px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background-color: var(--text-cream);
-            transition: .3s var(--apple-ease);
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent-green);
-            border: 1px solid var(--accent-brown);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(18px);
-            background-color: var(--accent-brown);
-        }
-
-        .send-btn {
-            background: var(--accent-brown);
-            color: var(--bg-main);
-            border: none;
-            border-radius: 14px;
-            padding: 13px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s var(--apple-ease);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 4px;
-        }
-
-        .send-btn:hover {
-            background: var(--accent-brown-hover);
-            transform: translateY(-1px);
-        }
-
-        .send-btn:active {
-            transform: scale(0.97);
-        }
-
-        .status-msg {
-            font-size: 0.78rem;
-            text-align: center;
-            margin-top: 4px;
-            min-height: 16px;
-        }
-
-        .status-success { color: #81c784; }
-        .status-error { color: #e57373; }
+        /* Mesaj Ekstraları */
+        .anon-switch { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+        .status-msg { text-align: center; font-size: 0.85rem; margin-top: 8px; min-height: 20px; }
+        .error-txt { color: #e57373; } .success-txt { color: #81c784; }
     </style>
 </head>
 <body>
 
-    <div id="mainCard" class="card">
+    <div id="appContainer" class="app-container">
         
-        <!-- SADECE İLK GİRİŞTE GÖZÜKEN KÜÇÜK KARE İÇERİĞİ -->
-        <div id="stepIntro" class="content-step">
-            <div class="intro-box">
-                <h2 class="intro-title">Aramıza Hoş Geldin 👋</h2>
+        <!-- KATMAN 1: İLK GİRİŞ EKRANI -->
+        <div id="layerIntro" class="layer intro-content">
+            <h2 class="intro-title">Hoş Geldin 👋</h2>
+            
+            <div class="field-group">
+                <label class="field-label">Sana nasıl hitap edelim? (Zorunlu)</label>
+                <input type="text" id="introName" class="input-field" placeholder="Adını gir..." maxlength="30">
+            </div>
+
+            <div class="field-group" style="margin-top: 10px;">
+                <label class="field-label">Poyraz ile daha önce tanıştınız mı?</label>
+                <div class="radio-grid">
+                    <div class="radio-btn active" onclick="selectRadio(this, 'Evet')">Evet, tanışıyoruz</div>
+                    <div class="radio-btn" onclick="selectRadio(this, 'Hayır')">İlk defa</div>
+                </div>
+            </div>
+
+            <button class="primary-btn" onclick="completeIntro()">Uygulamaya Geç</button>
+            <div id="introError" class="status-msg error-txt"></div>
+        </div>
+
+        <!-- KATMAN 2: ANA UYGULAMA (GİZLİ BAŞLAR) -->
+        <div id="layerMain" class="layer main-app hidden">
+            
+            <div class="top-bar">
+                <div id="welcomeHeading" class="welcome-text">Hoş geldin</div>
+                <div style="color: var(--text-muted); font-size: 1.1rem;"><i class="fa-solid fa-fingerprint"></i></div>
+            </div>
+
+            <div class="view-container">
                 
-                <div class="field-group">
-                    <label class="field-label">Sana nasıl hitap edelim? (Zorunlu)</label>
-                    <input type="text" id="introName" class="input-field" placeholder="Adını gir..." maxlength="30">
+                <!-- SEKME 1: PROFİL -->
+                <div id="tab-home" class="tab-view active">
+                    <div class="profile-header">
+                        <div class="avatar-lg">AP</div>
+                        <h1 class="name-lg">Ali Poyraz</h1>
+                        <div class="age-badge">14 Yaşında</div>
+                    </div>
+                    <p class="bio-text">Kod dünyası ile fiziksel antrenmanlar arasında gidip gelen bir hayatım var. Yazılım mantığı ve sistem optimizasyonu hobimden öte bir şey.</p>
                 </div>
 
-                <div class="field-group">
-                    <label class="field-label">Poyraz ile daha önce tanıştınız mı?</label>
-                    <div class="radio-options">
-                        <div class="radio-btn active" onclick="selectRadio(this, 'Evet')">
-                            Evet, tanışıyoruz
-                        </div>
-                        <div class="radio-btn" onclick="selectRadio(this, 'Hayır')">
-                            İlk defa görüyorum
+                <!-- SEKME 2: HAKKINDA / HOBİLER -->
+                <div id="tab-about" class="tab-view">
+                    <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Neler Yapıyorum?</h3>
+                    <div class="hobby-grid">
+                        <div class="hobby-chip"><i class="fa-solid fa-code"></i> Kodlama</div>
+                        <div class="hobby-chip"><i class="fa-solid fa-basketball"></i> Basketbol</div>
+                        <div class="hobby-chip"><i class="fa-solid fa-mountain"></i> Tırmanma</div>
+                        <div class="hobby-chip"><i class="fa-solid fa-bicycle"></i> Bisiklet</div>
+                        <div class="hobby-chip"><i class="fa-solid fa-gamepad"></i> Video Oyunları</div>
+                    </div>
+
+                    <div class="music-card">
+                        <div class="music-icon"><i class="fa-solid fa-headphones"></i></div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.95rem;">Müzik Zevki</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 3px;">"Kulağa ne güzel gelirse"</div>
                         </div>
                     </div>
                 </div>
 
-                <button class="send-btn" onclick="completeIntro()">
-                    Devam Et
-                </button>
-                <div id="introError" class="status-msg status-error"></div>
-            </div>
-        </div>
-
-        <!-- ANA PROFİL İÇERİĞİ (BAŞLANGIÇTA GİZLİ VEYA TEKRAR GİRİŞTE DİREKT AÇIK) -->
-        <div id="stepMain" class="content-step hidden">
-            <div class="profile-section">
-                <div id="welcomeHeading" class="welcome-badge"></div>
-                <div class="avatar">AP</div>
-                <h1 class="name">Ali Poyraz</h1>
-                <p class="bio">Kod yazmak, kalisteniks, basketbol ve sistem optimizasyonları. Takılmaca.</p>
-
-                <div class="tags-container">
-                    <span class="tag">Samsun</span>
-                    <span class="tag">Luau & Scripting</span>
-                    <span class="tag">Hot Wheels</span>
-                    <span class="tag">Linux</span>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="message-box">
-                <textarea id="userMessage" class="textarea-field" placeholder="Düşüncelerini veya söylemek istediğini yaz..." maxlength="500"></textarea>
-
-                <label class="anon-option">
-                    <span class="anon-text">İsmim gizlensin (Anonim Gönder)</span>
-                    <div class="switch">
-                        <input type="checkbox" id="anonCheck">
-                        <span class="slider"></span>
+                <!-- SEKME 3: DUMAN (KEDİ) -->
+                <div id="tab-duman" class="tab-view">
+                    <h3 class="section-title"><i class="fa-solid fa-paw"></i> Hayatımın Patronu</h3>
+                    <div class="cat-card">
+                        <img src="20260509_123313_1778319997005.jpg" alt="Kedim Duman" class="cat-img">
+                        <div class="cat-info">
+                            <div class="cat-name">Duman</div>
+                            <div class="cat-desc">Onu çok seviyorum. Ekibin en rahat üyesi.</div>
+                        </div>
                     </div>
-                </label>
+                </div>
 
-                <button class="send-btn" onclick="sendMessage()">
-                    Mesajı Gönder
-                </button>
+                <!-- SEKME 4: MESAJ -->
+                <div id="tab-message" class="tab-view">
+                    <h3 class="section-title"><i class="fa-solid fa-paper-plane"></i> Bana Ulaş</h3>
+                    <textarea id="userMessage" class="textarea-field" style="height: 120px; resize: none;" placeholder="Düşüncelerini veya söylemek istediğini yaz..." maxlength="500"></textarea>
+                    
+                    <div class="anon-switch">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">İsmim gizlensin (Anonim)</span>
+                        <input type="checkbox" id="anonCheck" style="width: 20px; height: 20px; accent-color: var(--accent-brown);">
+                    </div>
 
-                <div id="statusMsg" class="status-msg"></div>
+                    <button class="primary-btn" onclick="sendMessage()">Mesajı Fırlat</button>
+                    <div id="statusMsg" class="status-msg"></div>
+                </div>
+
             </div>
-        </div>
 
+            <!-- ALT MENÜ -->
+            <nav class="bottom-nav">
+                <div class="nav-item active" onclick="switchTab('home', this)"><i class="fa-solid fa-user"></i></div>
+                <div class="nav-item" onclick="switchTab('about', this)"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="nav-item" onclick="switchTab('duman', this)"><i class="fa-solid fa-cat"></i></div>
+                <div class="nav-item" onclick="switchTab('message', this)"><i class="fa-solid fa-message"></i></div>
+            </nav>
+
+        </div>
     </div>
-
-    <script>
+        <script>
+        // BURAYA KENDİ DISCORD WEBHOOK URL'Nİ YAPIŞTIR
         const DISCORD_WEBHOOK_URL = "BURAYA_DISCORD_WEBHOOK_LINKINI_YAPISTIR";
         let metPoyrazValue = "Evet";
 
         window.addEventListener('DOMContentLoaded', () => {
-            const card = document.getElementById('mainCard');
+            const app = document.getElementById('appContainer');
             const savedName = localStorage.getItem('visitor_name');
 
             if (savedName) {
-                // Daha önce girmişse: Animasyonsuz, direkt genişlemiş kart ve sadece profil içeriği
-                card.classList.add('expanded');
-                document.getElementById('stepIntro').classList.add('hidden');
-                
-                const stepMain = document.getElementById('stepMain');
-                stepMain.classList.remove('hidden');
+                // Önceden girilmişse, doğrudan geniş uygulamaya geç
+                app.classList.add('expanded');
+                document.getElementById('layerIntro').classList.add('hidden');
+                document.getElementById('layerMain').classList.remove('hidden');
                 document.getElementById('welcomeHeading').innerText = `Hoş geldin, ${savedName} 👋`;
             } else {
-                // İlk giriş: Alt kısımdan fırlayan animasyonlu kare kutu
-                card.classList.add('anim-pop');
+                // İlk defa giriliyorsa animasyonlu karşılama
+                app.classList.add('anim-pop');
             }
         });
 
+        // Radyo Buton Mantığı
         function selectRadio(element, value) {
             document.querySelectorAll('.radio-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
             metPoyrazValue = value;
         }
 
+        // Karşılama Ekranını Tamamlama
         function completeIntro() {
             const nameInput = document.getElementById('introName').value.trim();
-            const introError = document.getElementById('introError');
+            const errorTxt = document.getElementById('introError');
 
             if (!nameInput) {
-                introError.innerText = "Lütfen adını gir kanka.";
+                errorTxt.innerText = "Devam etmek için adını girmelisin.";
                 return;
             }
 
-            introError.innerText = "";
-
-            // Bilgileri kaydet
+            errorTxt.innerText = "";
             localStorage.setItem('visitor_name', nameInput);
             localStorage.setItem('met_poyraz', metPoyrazValue);
-            localStorage.setItem('device_screen', `${window.screen.width}x${window.screen.height}`);
 
-            const stepIntro = document.getElementById('stepIntro');
-            const stepMain = document.getElementById('stepMain');
-            const card = document.getElementById('mainCard');
+            const layerIntro = document.getElementById('layerIntro');
+            const layerMain = document.getElementById('layerMain');
+            const app = document.getElementById('appContainer');
 
-            // 1. Yazılar Fade Out
-            stepIntro.classList.add('fade-out');
+            layerIntro.style.opacity = '0';
 
             setTimeout(() => {
-                // 2. Karşılama kutusu tamamen gizlenir
-                stepIntro.classList.add('hidden');
+                layerIntro.classList.add('hidden');
+                app.classList.add('expanded'); // Kutu genişler
                 
-                // 3. Kare kutu dikey ve yatay olarak yumuşakça esneyerek dikdörtgen profile dönüşür
-                card.classList.add('expanded');
-
-                // 4. Ana profil içeriği görünür yapılır ve fade-in olur
-                stepMain.classList.remove('hidden');
-                stepMain.classList.add('fade-in');
-                document.getElementById('welcomeHeading').innerText = `Aramıza Katıldın, ${nameInput}`;
-            }, 350);
+                setTimeout(() => {
+                    layerMain.classList.remove('hidden');
+                    document.getElementById('welcomeHeading').innerText = `Katıldın, ${nameInput} 🚀`;
+                }, 300);
+            }, 400);
         }
 
+        // Menü (Sekme) Geçiş Motoru
+        function switchTab(tabName, navElement) {
+            // Aktif ikonu değiştir
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navElement.classList.add('active');
+
+            const allTabs = document.querySelectorAll('.tab-view');
+            
+            // Tüm sekmeleri sola kaydırıp gizle
+            allTabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('prev');
+            });
+
+            // Seçilen sekmeyi sağdan getir ve aktif yap
+            setTimeout(() => {
+                const target = document.getElementById(`tab-${tabName}`);
+                target.classList.remove('prev');
+                target.classList.add('active');
+            }, 50);
+        }
+
+        // Discord Webhook Mesaj Gönderme
         async function sendMessage() {
             const messageInput = document.getElementById('userMessage').value.trim();
             const isAnon = document.getElementById('anonCheck').checked;
             const statusMsg = document.getElementById('statusMsg');
 
             if (!messageInput) {
-                statusMsg.className = "status-msg status-error";
-                statusMsg.innerText = "Bir mesaj yazmayı unuttun kanka.";
+                statusMsg.className = "status-msg error-txt";
+                statusMsg.innerText = "Boş mesaj gönderilemez kanka.";
                 return;
             }
 
             const savedName = localStorage.getItem('visitor_name') || "İsimsiz";
             const metInfo = localStorage.getItem('met_poyraz') || "Bilinmiyor";
-            const screenInfo = localStorage.getItem('device_screen') || "Bilinmiyor";
-
             let senderName = isAnon ? "Anonim 🥷" : savedName;
 
             statusMsg.className = "status-msg";
+            statusMsg.style.color = "var(--text-muted)";
             statusMsg.innerText = "Gönderiliyor...";
 
             const payload = {
-                username: "Site Mesaj Botu",
+                username: "Ali Poyraz App",
                 embeds: [{
-                    title: "📩 Siteden Yeni Mesaj!",
+                    title: "📩 Uygulamadan Yeni Mesaj!",
                     color: isAnon ? 0x7289da : 0x2e5238,
                     fields: [
                         { name: "Gönderen", value: senderName, inline: true },
-                        { name: "Poyraz ile Tanışıyor mu?", value: metInfo, inline: true },
-                        { name: "Ekran Boyutu", value: screenInfo, inline: true },
+                        { name: "Tanışıklık", value: metInfo, inline: true },
                         { name: "Mesaj", value: messageInput }
                     ],
                     timestamp: new Date()
@@ -534,15 +404,13 @@
                 });
 
                 if (response.ok || response.status === 204) {
-                    statusMsg.className = "status-msg status-success";
-                    statusMsg.innerText = "Mesajın iletildi kanka!";
+                    statusMsg.className = "status-msg success-txt";
+                    statusMsg.innerText = "Mesajın başarıyla fırlatıldı!";
                     document.getElementById('userMessage').value = "";
-                } else {
-                    throw new Error();
-                }
+                } else throw new Error();
             } catch (err) {
-                statusMsg.className = "status-msg status-error";
-                statusMsg.innerText = "Hata oluştu, gönderilemedi.";
+                statusMsg.className = "status-msg error-txt";
+                statusMsg.innerText = "Bağlantı hatası. Mesaj gitmedi.";
             }
         }
     </script>
