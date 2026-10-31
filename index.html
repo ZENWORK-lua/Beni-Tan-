@@ -13,7 +13,7 @@
     <style>
         :root {
             --bg-main: #0c140e;          
-            --card-bg: rgba(20, 32, 24, 0.75); /* Arkadaki animasyonun hafif görünmesi için saydamlık artırıldı */     
+            --card-bg: rgba(20, 32, 24, 0.75);     
             --card-border: rgba(30, 48, 36, 0.8);      
             --text-cream: #f4efe6;       
             --text-muted: #9ab0a0;       
@@ -74,7 +74,6 @@
             overflow: hidden;
         }
 
-        /* Kart Boyutu 600px'e düşürüldü, alttaki boşluklar engellendi */
         .app-container.expanded { max-width: 420px; height: 600px; border-radius: 40px; }
 
         .layer {
@@ -89,12 +88,12 @@
             pointer-events: none !important; z-index: 1 !important; display: none !important; 
         }
 
-        /* Giriş Ekranı */
-        intro-content {
-    justify-content: center;
-    gap: 16px;
-    z-index: 99 !important; /* Butonun her şeyin üstünde olmasını sağlar */
-    pointer-events: all !important;
+        /* Giriş Ekranı Düzeltildi */
+        .intro-content {
+            justify-content: center;
+            gap: 16px;
+            z-index: 99 !important;
+            pointer-events: all !important;
         }
         
         .intro-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
@@ -117,22 +116,21 @@
         }
         .radio-btn.active { border-color: var(--accent-brown); background: rgba(207, 189, 168, 0.12); color: var(--text-cream); font-weight: 600; }
 
+        /* Fazladan Paranteiz Temizlendi */
         .primary-btn {
-    position: relative;
-    z-index: 100 !important;
-    background: var(--accent-brown); 
-    color: var(--bg-main);
-    border: none; 
-    border-radius: 16px; 
-    padding: 16px; 
-    font-size: 1rem; 
-    font-weight: 700;
-    cursor: pointer; 
-    transition: all 0.2s var(--apple-ease); 
-    width: 100%; 
-    margin-top: 10px;
-        }
-        
+            position: relative;
+            z-index: 100 !important;
+            background: var(--accent-brown); 
+            color: var(--bg-main);
+            border: none; 
+            border-radius: 16px; 
+            padding: 16px; 
+            font-size: 1rem; 
+            font-weight: 700;
+            cursor: pointer; 
+            transition: all 0.2s var(--apple-ease); 
+            width: 100%; 
+            margin-top: 10px;
         }
         .primary-btn:active { transform: scale(0.96); }
 
@@ -145,7 +143,7 @@
         
         .tab-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 10px 24px 100px 24px; /* Alt barın arkasına taşmaması için padding artırıldı */
+            padding: 10px 24px 100px 24px;
             overflow-y: auto; opacity: 0; transform: translateX(20px); pointer-events: none;
             transition: all 0.5s var(--apple-ease);
         }
@@ -166,7 +164,7 @@
         .music-card { background: linear-gradient(135deg, rgba(46, 82, 56, 0.3) 0%, rgba(12, 20, 14, 0.1) 100%); border: 1px solid var(--card-border); padding: 16px; border-radius: 20px; margin-top: 20px; display: flex; align-items: center; gap: 16px; }
         .music-icon { width: 40px; height: 40px; background: var(--accent-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-main); font-size: 1.2rem; }
 
-        /* --- DUMAN (KEDİ) DÜZELTMELERİ --- */
+        /* Duman Kartı */
         .cat-card { width: 100%; border-radius: 20px; overflow: hidden !important; border: 1px solid var(--card-border); background: rgba(12, 20, 14, 0.6); }
         .cat-img { width: 100%; height: 210px; object-fit: cover; display: block; border-radius: 20px 20px 0 0; }
         .cat-info { padding: 14px 16px; background: rgba(12, 20, 14, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); }
@@ -277,7 +275,6 @@
 
                 <div id="tab-duman" class="tab-view">
                     <h3 class="section-title"><i class="fa-solid fa-paw"></i> Hayatımın Patronu</h3>
-                    <!-- Duman Kartı HTML Eksikliği Giderildi -->
                     <div class="cat-card">
                         <img src="https://i.ibb.co/Lh5F6yPY/image.jpg" alt="Kedim Duman" class="cat-img">
                         <div class="cat-info">
@@ -291,7 +288,6 @@
                     <h3 class="section-title"><i class="fa-solid fa-paper-plane"></i> Bana yaz 📨</h3>
                     <textarea id="userMessage" class="textarea-field" style="height: 120px; resize: none;" placeholder="Düşüncelerini veya söylemek istediğini yaz..." maxlength="500"></textarea>
                     
-                    <!-- Apple Style Switch Eklendi -->
                     <label class="anon-option">
                         <span style="font-size: 0.85rem; color: var(--text-muted);">İsmimi gizle (Anonim)</span>
                         <div class="switch">
@@ -322,7 +318,9 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const app = document.getElementById('appContainer');
-            const savedName = localStorage.getItem('visitor_name');
+            let savedName = null;
+
+            try { savedName = localStorage.getItem('visitor_name'); } catch(e) {}
 
             if (savedName) {
                 app.classList.add('expanded');
@@ -341,58 +339,43 @@
         }
 
         function completeIntro() {
-    // 1. Elemanları çekiyoruz
-    const inputEl = document.getElementById('introName');
-    const errorTxt = document.getElementById('introError');
-    const nameInput = inputEl ? inputEl.value.trim() : "";
+            const inputEl = document.getElementById('introName');
+            const errorTxt = document.getElementById('introError');
+            const nameInput = inputEl ? inputEl.value.trim() : "";
 
-    // 2. İsim kontrolü
-    if (!nameInput) {
-        if (errorTxt) errorTxt.innerText = "Devam etmek için adını yazmalısın.";
-        return;
-    }
+            if (!nameInput) {
+                if (errorTxt) errorTxt.innerText = "Devam etmek için adını yazmalısın.";
+                return;
+            }
 
-    if (errorTxt) errorTxt.innerText = "";
-    
-    // 3. Hafıza kaydı (Hata verirse bile kodu durdurmaz)
-    try {
-        localStorage.setItem('visitor_name', nameInput);
-        localStorage.setItem('met_poyraz', typeof metPoyrazValue !== 'undefined' ? metPoyrazValue : 'Evet');
-    } catch(e) {
-        console.log("Storage izni yok ama devam ediliyor.");
-    }
+            if (errorTxt) errorTxt.innerText = "";
+            
+            try {
+                localStorage.setItem('visitor_name', nameInput);
+                localStorage.setItem('met_poyraz', typeof metPoyrazValue !== 'undefined' ? metPoyrazValue : 'Evet');
+            } catch(e) {}
 
-    // 4. Katmanları doğrudan DOM üzerinden değiştirme
-    const layerIntro = document.getElementById('layerIntro');
-    const layerMain = document.getElementById('layerMain');
-    const app = document.getElementById('appContainer');
-    const welcomeHeading = document.getElementById('welcomeHeading');
+            const layerIntro = document.getElementById('layerIntro');
+            const layerMain = document.getElementById('layerMain');
+            const app = document.getElementById('appContainer');
+            const welcomeHeading = document.getElementById('welcomeHeading');
 
-    if (welcomeHeading) {
-        welcomeHeading.innerText = `Katıldın, ${nameInput} 🚀`;
-    }
+            if (welcomeHeading) welcomeHeading.innerText = `Katıldın, ${nameInput} 🚀`;
 
-    // Giriş katmanını anında kapat
-    if (layerIntro) {
-        layerIntro.style.display = 'none';
-        layerIntro.classList.add('hidden');
-    }
+            if (layerIntro) {
+                layerIntro.style.display = 'none';
+                layerIntro.classList.add('hidden');
+            }
 
-    // Ana kutuyu genişlet
-    if (app) {
-        app.classList.add('expanded');
-    }
+            if (app) app.classList.add('expanded');
 
-    // Ana uygulamayı aç
-    if (layerMain) {
-        layerMain.style.display = 'flex';
-        layerMain.classList.remove('hidden');
-        layerMain.style.opacity = '1';
-        layerMain.style.pointerEvents = 'all';
-    }
+            if (layerMain) {
+                layerMain.style.display = 'flex';
+                layerMain.classList.remove('hidden');
+                layerMain.style.opacity = '1';
+                layerMain.style.pointerEvents = 'all';
+            }
         }
-        
-        
 
         function switchTab(tabName, navElement) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -401,16 +384,75 @@
             const allTabs = document.querySelectorAll('.tab-view');
             
             allTabs.forEach(tab => {
+                           allTabs.forEach(tab => {
                 tab.classList.remove('active');
                 tab.classList.add('prev');
             });
 
             setTimeout(() => {
                 const target = document.getElementById(`tab-${tabName}`);
-                target.classList.remove('prev');
-                target.classList.add('active');
+                if (target) {
+                    target.classList.remove('prev');
+                    target.classList.add('active');
+                }
             }, 50);
         }
 
         async function sendMessage() {
-            const messageInput = document.getElement
+            const messageInput = document.getElementById('userMessage').value.trim();
+            const isAnon = document.getElementById('anonCheck').checked;
+            const statusMsg = document.getElementById('statusMsg');
+
+            if (!messageInput) {
+                statusMsg.className = "status-msg error-txt";
+                statusMsg.innerText = "Boş mesaj gönderilemez kanka.";
+                return;
+            }
+
+            let savedName = "İsimsiz";
+            let metInfo = "Bilinmiyor";
+            try {
+                savedName = localStorage.getItem('visitor_name') || "İsimsiz";
+                metInfo = localStorage.getItem('met_poyraz') || "Bilinmiyor";
+            } catch(e) {}
+
+            let senderName = isAnon ? "Anonim 🥷" : savedName;
+
+            statusMsg.className = "status-msg";
+            statusMsg.style.color = "var(--text-muted)";
+            statusMsg.innerText = "Gönderiliyor...";
+
+            const payload = {
+                username: "Ali Poyraz App",
+                embeds: [{
+                    title: "📩 Uygulamadan Yeni Mesaj!",
+                    color: isAnon ? 0x7289da : 0x2e5238,
+                    fields: [
+                        { name: "Gönderen", value: senderName, inline: true },
+                        { name: "Tanışıklık", value: metInfo, inline: true },
+                        { name: "Mesaj", value: messageInput }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            try {
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok || response.status === 204) {
+                    statusMsg.className = "status-msg success-txt";
+                    statusMsg.innerText = "Mesajın başarıyla fırlatıldı!";
+                    document.getElementById('userMessage').value = "";
+                } else throw new Error();
+            } catch (err) {
+                statusMsg.className = "status-msg error-txt";
+                statusMsg.innerText = "Bağlantı hatası. Mesaj gitmedi.";
+            }
+        }
+    </script>
+</body>
+</html>
