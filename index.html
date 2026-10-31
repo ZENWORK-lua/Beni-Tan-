@@ -43,10 +43,10 @@
             overflow-x: hidden;
         }
 
-        /* Ana Kart: Dinamik olarak boyut değiştiren kapsayıcı */
-        .main-card {
+        /* Ana Kart - Esneyen Yapı */
+        .card {
             width: 100%;
-            max-width: 420px;
+            max-width: 360px; /* İlk aşamada küçük karemsi */
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 28px;
@@ -54,23 +54,27 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(20px);
             position: relative;
-            overflow: hidden;
-            transition: all 0.75s var(--apple-ease);
+            transition: max-width 0.6s var(--apple-ease), padding 0.6s var(--apple-ease);
         }
 
-        /* Ekranın altından fırlayıp kareleşen daire animasyonu */
-        .card-intro-anim {
-            animation: popFromBottom 0.85s var(--apple-ease) forwards;
+        /* Genişlemiş Ana Profil Modu */
+        .card.expanded {
+            max-width: 440px;
         }
 
-        @keyframes popFromBottom {
+        /* Ekranın altından çıkıp yuvarlatılmış kareye dönüşme animasyonu */
+        .anim-pop {
+            animation: popUp 0.85s var(--apple-ease) forwards;
+        }
+
+        @keyframes popUp {
             0% {
-                transform: translateY(100vh) scale(0.2);
+                transform: translateY(100vh) scale(0.1);
                 border-radius: 50%;
                 opacity: 0;
             }
             60% {
-                transform: translateY(-10px) scale(1.02);
+                transform: translateY(-8px) scale(1.02);
                 border-radius: 36px;
                 opacity: 1;
             }
@@ -81,32 +85,42 @@
             }
         }
 
-        /* Sayfa Aşama Geçişleri */
-        .step {
-            opacity: 1;
-            transition: opacity 0.4s var(--apple-ease), transform 0.4s var(--apple-ease);
+        /* Aşama İçerikleri */
+        .content-step {
+            transition: opacity 0.35s var(--apple-ease), transform 0.35s var(--apple-ease);
         }
 
-        .step-hidden {
+        .fade-out {
             opacity: 0;
+            transform: scale(0.95);
             pointer-events: none;
-            position: absolute;
-            width: calc(100% - 48px);
-            transform: scale(0.96);
         }
 
-        /* Adım 1: Karşılama Formu */
-        .intro-form {
+        .fade-in {
+            animation: fadeInStep 0.45s var(--apple-ease) forwards;
+        }
+
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Gizli Eleman */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Karşılama Formu */
+        .intro-box {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
         .intro-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 700;
             text-align: center;
-            margin-bottom: 4px;
             color: var(--text-cream);
         }
 
@@ -117,7 +131,7 @@
         }
 
         .field-label {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 500;
         }
@@ -129,7 +143,7 @@
             border-radius: 14px;
             padding: 12px 14px;
             color: var(--text-cream);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             outline: none;
             transition: all 0.25s var(--apple-ease);
         }
@@ -140,10 +154,10 @@
             box-shadow: 0 0 0 3px rgba(207, 189, 168, 0.12);
         }
 
-        /* Radio Seçenek Kutusu (Poyraz ile tanıştınız mı?) */
+        /* Poyraz ile tanıştınız mı? Seçenekleri */
         .radio-options {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .radio-btn {
@@ -153,17 +167,13 @@
             justify-content: center;
             background: rgba(12, 20, 14, 0.5);
             border: 1px solid var(--card-border);
-            padding: 10px;
+            padding: 10px 8px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             transition: all 0.25s var(--apple-ease);
             user-select: none;
-        }
-
-        .radio-btn input {
-            display: none;
         }
 
         .radio-btn.active {
@@ -177,6 +187,14 @@
         .profile-section {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .welcome-badge {
+            font-size: 0.85rem;
+            color: var(--accent-brown);
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
         }
 
         .avatar {
@@ -195,19 +213,10 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
         }
 
-        .welcome-badge {
-            font-size: 0.82rem;
-            color: var(--accent-brown);
-            font-weight: 600;
-            margin-bottom: 4px;
-            letter-spacing: 0.02em;
-        }
-
         .name {
             font-size: 1.4rem;
             font-weight: 700;
             color: var(--text-cream);
-            letter-spacing: -0.01em;
         }
 
         .bio {
@@ -241,7 +250,7 @@
             margin: 20px 0;
         }
 
-        /* Mesaj Alanı */
+        /* Mesaj Kutusu */
         .message-box {
             display: flex;
             flex-direction: column;
@@ -322,7 +331,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
             margin-top: 4px;
         }
 
@@ -348,11 +356,11 @@
 </head>
 <body>
 
-    <div id="mainCard" class="main-card card-intro-anim">
+    <div id="mainCard" class="card">
         
-        <!-- ADIM 1: KARŞILAMA VE BİLGİ ALMA -->
-        <div id="stepIntro" class="step">
-            <div class="intro-form">
+        <!-- SADECE İLK GİRİŞTE GÖZÜKEN KÜÇÜK KARE İÇERİĞİ -->
+        <div id="stepIntro" class="content-step">
+            <div class="intro-box">
                 <h2 class="intro-title">Aramıza Hoş Geldin 👋</h2>
                 
                 <div class="field-group">
@@ -363,24 +371,24 @@
                 <div class="field-group">
                     <label class="field-label">Poyraz ile daha önce tanıştınız mı?</label>
                     <div class="radio-options">
-                        <label class="radio-btn active" onclick="selectRadio(this, 'Evet')">
-                            <input type="radio" name="metPoyraz" value="Evet" checked> Evet, tanışıyoruz
-                        </label>
-                        <label class="radio-btn" onclick="selectRadio(this, 'Hayır')">
-                            <input type="radio" name="metPoyraz" value="Hayır"> İlk defa görüyorum
-                        </label>
+                        <div class="radio-btn active" onclick="selectRadio(this, 'Evet')">
+                            Evet, tanışıyoruz
+                        </div>
+                        <div class="radio-btn" onclick="selectRadio(this, 'Hayır')">
+                            İlk defa görüyorum
+                        </div>
                     </div>
                 </div>
 
-                <button class="send-btn" style="margin-top: 8px;" onclick="completeIntro()">
+                <button class="send-btn" onclick="completeIntro()">
                     Devam Et
                 </button>
                 <div id="introError" class="status-msg status-error"></div>
             </div>
         </div>
 
-        <!-- ADIM 2: ASIL PROFİL VE MESAJ ALANI -->
-        <div id="stepMain" class="step step-hidden">
+        <!-- ANA PROFİL İÇERİĞİ (BAŞLANGIÇTA GİZLİ VEYA TEKRAR GİRİŞTE DİREKT AÇIK) -->
+        <div id="stepMain" class="content-step hidden">
             <div class="profile-section">
                 <div id="welcomeHeading" class="welcome-badge"></div>
                 <div class="avatar">AP</div>
@@ -422,13 +430,21 @@
         const DISCORD_WEBHOOK_URL = "BURAYA_DISCORD_WEBHOOK_LINKINI_YAPISTIR";
         let metPoyrazValue = "Evet";
 
-        // Sayfa Yüklendiğinde Kayıtlı Cihaz Kontrolü
         window.addEventListener('DOMContentLoaded', () => {
+            const card = document.getElementById('mainCard');
             const savedName = localStorage.getItem('visitor_name');
+
             if (savedName) {
-                // Önceden girmişse doğrudan profil sayfasına geç
-                document.getElementById('mainCard').classList.remove('card-intro-anim');
-                showMainStep(savedName, true);
+                // Daha önce girmişse: Animasyonsuz, direkt genişlemiş kart ve sadece profil içeriği
+                card.classList.add('expanded');
+                document.getElementById('stepIntro').classList.add('hidden');
+                
+                const stepMain = document.getElementById('stepMain');
+                stepMain.classList.remove('hidden');
+                document.getElementById('welcomeHeading').innerText = `Hoş geldin, ${savedName} 👋`;
+            } else {
+                // İlk giriş: Alt kısımdan fırlayan animasyonlu kare kutu
+                card.classList.add('anim-pop');
             }
         });
 
@@ -443,40 +459,36 @@
             const introError = document.getElementById('introError');
 
             if (!nameInput) {
-                introError.innerText = "Lütfen devam etmek için adını yaz kanka.";
+                introError.innerText = "Lütfen adını gir kanka.";
                 return;
             }
 
             introError.innerText = "";
-            
-            // Cihaz Bilgilerini localStorage Üzerine Kaydet
+
+            // Bilgileri kaydet
             localStorage.setItem('visitor_name', nameInput);
             localStorage.setItem('met_poyraz', metPoyrazValue);
             localStorage.setItem('device_screen', `${window.screen.width}x${window.screen.height}`);
 
-            // Yumuşak Geçiş (Fade out -> Expand -> Fade in)
             const stepIntro = document.getElementById('stepIntro');
-            stepIntro.style.opacity = '0';
-
-            setTimeout(() => {
-                stepIntro.classList.add('step-hidden');
-                showMainStep(nameInput, false);
-            }, 350);
-        }
-
-        function showMainStep(userName, isReturning) {
             const stepMain = document.getElementById('stepMain');
-            const welcomeHeading = document.getElementById('welcomeHeading');
+            const card = document.getElementById('mainCard');
 
-            welcomeHeading.innerText = isReturning ? `Hoş geldin, ${userName} 👋` : `Aramıza Katıldın, ${userName}`;
-            
-            stepMain.classList.remove('step-hidden');
-            stepMain.style.opacity = '0';
+            // 1. Yazılar Fade Out
+            stepIntro.classList.add('fade-out');
 
-            // Kartın esneyerek uzaması
             setTimeout(() => {
-                stepMain.style.opacity = '1';
-            }, 100);
+                // 2. Karşılama kutusu tamamen gizlenir
+                stepIntro.classList.add('hidden');
+                
+                // 3. Kare kutu dikey ve yatay olarak yumuşakça esneyerek dikdörtgen profile dönüşür
+                card.classList.add('expanded');
+
+                // 4. Ana profil içeriği görünür yapılır ve fade-in olur
+                stepMain.classList.remove('hidden');
+                stepMain.classList.add('fade-in');
+                document.getElementById('welcomeHeading').innerText = `Aramıza Katıldın, ${nameInput}`;
+            }, 350);
         }
 
         async function sendMessage() {
