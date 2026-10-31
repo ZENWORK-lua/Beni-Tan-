@@ -90,7 +90,13 @@
         }
 
         /* Giriş Ekranı */
-        .intro-content { justify-content: center; gap: 16px; z-index: 10; }
+        intro-content {
+    justify-content: center;
+    gap: 16px;
+    z-index: 99 !important; /* Butonun her şeyin üstünde olmasını sağlar */
+    pointer-events: all !important;
+        }
+        
         .intro-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
         .field-group { display: flex; flex-direction: column; gap: 8px; }
         .field-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
@@ -112,9 +118,21 @@
         .radio-btn.active { border-color: var(--accent-brown); background: rgba(207, 189, 168, 0.12); color: var(--text-cream); font-weight: 600; }
 
         .primary-btn {
-            background: var(--accent-brown); color: var(--bg-main);
-            border: none; border-radius: 16px; padding: 16px; font-size: 1rem; font-weight: 700;
-            cursor: pointer; transition: all 0.2s var(--apple-ease); width: 100%; margin-top: 10px;
+    position: relative;
+    z-index: 100 !important;
+    background: var(--accent-brown); 
+    color: var(--bg-main);
+    border: none; 
+    border-radius: 16px; 
+    padding: 16px; 
+    font-size: 1rem; 
+    font-weight: 700;
+    cursor: pointer; 
+    transition: all 0.2s var(--apple-ease); 
+    width: 100%; 
+    margin-top: 10px;
+        }
+        
         }
         .primary-btn:active { transform: scale(0.96); }
 
