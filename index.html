@@ -150,12 +150,29 @@
         .music-icon { width: 40px; height: 40px; background: var(--accent-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-main); font-size: 1.2rem; }
 
         /* 3. Duman (Kedi) */
-        .cat-card { width: 100%; border-radius: 24px; overflow: hidden; border: 1px solid var(--card-border); position: relative; }
-        .cat-img { width: 100%; height: 260px; object-fit: cover; display: block; }
-        .cat-info { padding: 16px; background: rgba(12, 20, 14, 0.8); backdrop-filter: blur(10px); position: absolute; bottom: 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); }
-        .cat-name { font-size: 1.2rem; font-weight: 700; color: var(--text-cream); }
-        .cat-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+        /* Duman Kartı ve Resim Düzeltmesi */
+.cat-card { 
+    width: 100%; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    border: 1px solid var(--card-border); 
+    background: rgba(12, 20, 14, 0.6);
+    margin-bottom: 80px; /* Alt menünün üstünü kapatmaması için boşluk */
+}
 
+.cat-img { 
+    width: 100%; 
+    height: 200px; /* Sabit yükseklik vererek taşmayı engelledik */
+    object-fit: cover; /* Resmi kırpmadan/bozmadan sığdırır */
+    display: block; 
+}
+
+.cat-info { 
+    padding: 14px 16px; 
+    background: rgba(12, 20, 14, 0.95); 
+    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+}
+        
         /* Alt Navigasyon Barı */
         .bottom-nav {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
