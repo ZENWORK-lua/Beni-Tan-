@@ -323,34 +323,49 @@
         }
 
         function completeIntro() {
-            const nameInput = document.getElementById('introName').value.trim();
-            const errorTxt = document.getElementById('introError');
+    const nameInput = document.getElementById('introName').value.trim();
+    const errorTxt = document.getElementById('introError');
 
-            if (!nameInput) {
-                errorTxt.innerText = "Devam etmek için adını girmelisin.";
-                return;
-            }
+    if (!nameInput) {
+        errorTxt.innerText = "Devam etmek için adını yazmalısın.";
+        return;
+    }
 
-            errorTxt.innerText = "";
-            localStorage.setItem('visitor_name', nameInput);
-            localStorage.setItem('met_poyraz', metPoyrazValue);
+    errorTxt.innerText = "";
+    
+    try {
+        localStorage.setItem('visitor_name', nameInput);
+        localStorage.setItem('met_poyraz', metPoyrazValue);
+    } catch(e) {}
 
-            const layerIntro = document.getElementById('layerIntro');
-            const layerMain = document.getElementById('layerMain');
-            const app = document.getElementById('appContainer');
+    const layerIntro = document.getElementById('layerIntro');
+    const layerMain = document.getElementById('layerMain');
+    const app = document.getElementById('appContainer');
 
-            layerIntro.style.opacity = '0';
+    // 1. Giriş katmanını şeffaflaştır ve tıklamayı KAPAT
+    layerIntro.style.opacity = '0';
+    layerIntro.style.pointerEvents = 'none';
 
-            setTimeout(() => {
-                layerIntro.classList.add('hidden');
-                app.classList.add('expanded'); 
-                
-                setTimeout(() => {
-                    layerMain.classList.remove('hidden');
-                    document.getElementById('welcomeHeading').innerText = `Katıldın, ${nameInput} 🚀`;
-                }, 300);
-            }, 400);
+    setTimeout(() => {
+        // 2. Karşılama katmanını tamamen gizle
+        layerIntro.classList.add('hidden');
+        layerIntro.style.display = 'none';
+
+        // 3. Ana kutuyu genişlet
+        app.classList.add('expanded'); 
+        
+        setTimeout(() => {
+            // 4. Ana profili görünür yap ve tıklamayı AÇ
+            layerMain.classList.remove('hidden');
+            layerMain.style.display = 'flex';
+            layerMain.style.opacity = '1';
+            layerMain.style.pointerEvents = 'all';
+
+            document.getElementById('welcomeHeading').innerText = `Katıldın, ${nameInput} 🚀`;
+        }, 200);
+    }, 350);
         }
+        
 
         function switchTab(tabName, navElement) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
