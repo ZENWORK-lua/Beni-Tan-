@@ -341,48 +341,57 @@
         }
 
         function completeIntro() {
-    const nameInput = document.getElementById('introName').value.trim();
+    // 1. Elemanları çekiyoruz
+    const inputEl = document.getElementById('introName');
     const errorTxt = document.getElementById('introError');
+    const nameInput = inputEl ? inputEl.value.trim() : "";
 
+    // 2. İsim kontrolü
     if (!nameInput) {
-        errorTxt.innerText = "Devam etmek için adını yazmalısın.";
+        if (errorTxt) errorTxt.innerText = "Devam etmek için adını yazmalısın.";
         return;
     }
 
-    errorTxt.innerText = "";
+    if (errorTxt) errorTxt.innerText = "";
     
+    // 3. Hafıza kaydı (Hata verirse bile kodu durdurmaz)
     try {
         localStorage.setItem('visitor_name', nameInput);
-        localStorage.setItem('met_poyraz', metPoyrazValue);
-    } catch(e) {}
+        localStorage.setItem('met_poyraz', typeof metPoyrazValue !== 'undefined' ? metPoyrazValue : 'Evet');
+    } catch(e) {
+        console.log("Storage izni yok ama devam ediliyor.");
+    }
 
+    // 4. Katmanları doğrudan DOM üzerinden değiştirme
     const layerIntro = document.getElementById('layerIntro');
     const layerMain = document.getElementById('layerMain');
     const app = document.getElementById('appContainer');
+    const welcomeHeading = document.getElementById('welcomeHeading');
 
-    // 1. Giriş katmanını şeffaflaştır ve tıklamayı KAPAT
-    layerIntro.style.opacity = '0';
-    layerIntro.style.pointerEvents = 'none';
+    if (welcomeHeading) {
+        welcomeHeading.innerText = `Katıldın, ${nameInput} 🚀`;
+    }
 
-    setTimeout(() => {
-        // 2. Karşılama katmanını tamamen gizle
-        layerIntro.classList.add('hidden');
+    // Giriş katmanını anında kapat
+    if (layerIntro) {
         layerIntro.style.display = 'none';
+        layerIntro.classList.add('hidden');
+    }
 
-        // 3. Ana kutuyu genişlet
-        app.classList.add('expanded'); 
-        
-        setTimeout(() => {
-            // 4. Ana profili görünür yap ve tıklamayı AÇ
-            layerMain.classList.remove('hidden');
-            layerMain.style.display = 'flex';
-            layerMain.style.opacity = '1';
-            layerMain.style.pointerEvents = 'all';
+    // Ana kutuyu genişlet
+    if (app) {
+        app.classList.add('expanded');
+    }
 
-            document.getElementById('welcomeHeading').innerText = `Katıldın, ${nameInput} 🚀`;
-        }, 200);
-    }, 350);
+    // Ana uygulamayı aç
+    if (layerMain) {
+        layerMain.style.display = 'flex';
+        layerMain.classList.remove('hidden');
+        layerMain.style.opacity = '1';
+        layerMain.style.pointerEvents = 'all';
+    }
         }
+        
         
 
         function switchTab(tabName, navElement) {
