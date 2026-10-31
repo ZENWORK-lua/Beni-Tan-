@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ali Poyraz | Profil</title>
     
+    <!-- Google Fonts & FontAwesome İkonları -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,14 +13,16 @@
 
     <style>
         :root {
+            /* Renk Paleti: Premium Yeşil ve Krem Tonları */
             --bg-main: #0c140e;          
-            --card-bg: rgba(20, 32, 24, 0.75);     
-            --card-border: rgba(30, 48, 36, 0.8);      
+            --card-bg: #142018;          
+            --card-border: #1e3024;      
             --text-cream: #f4efe6;       
             --text-muted: #9ab0a0;       
             --accent-green: #2e5238;     
             --accent-brown: #cfbda8;     
             --nav-bg: rgba(20, 32, 24, 0.85);
+            /* Apple Tarzı İpeksi Geçiş */
             --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -32,73 +35,79 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; 
-            position: relative;
+            background-image: radial-gradient(circle at 50% 0%, #15261b 0%, var(--bg-main) 70%);
+            background-attachment: fixed;
+            overflow: hidden; /* Dışarı taşmaları engelle */
         }
 
-        /* --- NEFES ALAN CANLI ARKA PLAN ANİMASYONU --- */
-        .bg-animated {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none; overflow: hidden;
-        }
-        .blob {
-            position: absolute; border-radius: 50%; filter: blur(70px);
-            animation: breathe 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .blob-1 {
-            width: 300px; height: 300px; background: rgba(46, 82, 56, 0.3);
-            top: -10%; left: -10%;
-        }
-        .blob-2 {
-            width: 400px; height: 400px; background: rgba(20, 32, 24, 0.7);
-            bottom: -20%; right: -10%; animation-duration: 14s; animation-delay: -2s;
-        }
-        .blob-3 {
-            width: 250px; height: 250px; background: rgba(207, 189, 168, 0.08);
-            top: 40%; left: 60%; animation-duration: 12s; animation-delay: -4s;
-        }
+        /* Ana Uygulama Çerçevesi */
+        /* Ana Çerçeve */
+.app-container {
+    width: 100%;
+    max-width: 360px;
+    height: 440px; /* İlk açılış yüksekliği biraz artırıldı */
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    position: relative;
+    transition: max-width 0.7s var(--apple-ease), height 0.7s var(--apple-ease), border-radius 0.7s var(--apple-ease);
+    overflow: hidden;
+}
 
-        @keyframes breathe {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-            50% { transform: scale(1.15) translate(20px, -20px); opacity: 0.9; }
-            100% { transform: scale(0.9) translate(-20px, 20px); opacity: 0.6; }
-        }
+.app-container.expanded {
+    max-width: 420px;
+    height: 660px;
+    border-radius: 40px;
+}
 
-        /* --- ANA ÇERÇEVE --- */
-        .app-container {
-            width: 100%; max-width: 360px; height: 440px; 
-            background: var(--card-bg); border: 1px solid var(--card-border);
-            border-radius: 32px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(25px); position: relative; z-index: 10;
-            transition: max-width 0.7s var(--apple-ease), height 0.7s var(--apple-ease), border-radius 0.7s var(--apple-ease);
-            overflow: hidden;
-        }
+/* Katman Kontrolleri - Tıklama Engellerini Kaldırır */
+.layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.4s var(--apple-ease), transform 0.4s var(--apple-ease);
+    z-index: 2;
+}
 
-        .app-container.expanded { max-width: 420px; height: 600px; border-radius: 40px; }
+/* Gizlenen Katmanın Tıklamaları Engellemesi Sağlandı */
+.layer.hidden { 
+    opacity: 0 !important; 
+    transform: scale(0.95); 
+    pointer-events: none !important; 
+    z-index: 1 !important;
+    display: none !important; /* Çakışmayı kesin çözen satır */
+}
 
-        .layer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 24px; display: flex; flex-direction: column;
-            transition: opacity 0.4s var(--apple-ease), transform 0.4s var(--apple-ease);
-            z-index: 2;
-        }
+/* Giriş Katmanı Özel Düzenleme */
+.intro-content { 
+    justify-content: center; 
+    gap: 16px; 
+    z-index: 10;
+}
 
-        .layer.hidden { 
-            opacity: 0 !important; transform: scale(0.95); 
-            pointer-events: none !important; z-index: 1 !important; display: none !important; 
-        }
-
-        /* Giriş Ekranı Düzeltildi */
-        .intro-content {
-            justify-content: center;
-            gap: 16px;
-            z-index: 99 !important;
-            pointer-events: all !important;
-        }
+/* Alt Navigasyon Barı */
+.bottom-nav {
+    position: absolute; 
+    bottom: 16px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: calc(100% - 40px); 
+    height: 60px;
+    background: var(--nav-bg); 
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border); 
+    border-radius: 24px;
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center; 
+    padding: 0 10px;
+    z-index: 5;
+}
         
-        .intro-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
-        .field-group { display: flex; flex-direction: column; gap: 8px; }
-        .field-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
         
         .input-field, .textarea-field {
             width: 100%; background: rgba(12, 20, 14, 0.7);
@@ -106,8 +115,11 @@
             padding: 14px 16px; color: var(--text-cream); font-size: 0.95rem; outline: none;
             transition: all 0.25s var(--apple-ease);
         }
-        .input-field:focus, .textarea-field:focus { border-color: var(--accent-brown); background: rgba(12, 20, 14, 0.95); }
+        .input-field:focus, .textarea-field:focus {
+            border-color: var(--accent-brown); background: rgba(12, 20, 14, 0.95);
+        }
 
+        /* Radyo Butonlar */
         .radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .radio-btn {
             background: rgba(12, 20, 14, 0.5); border: 1px solid var(--card-border);
@@ -116,106 +128,100 @@
         }
         .radio-btn.active { border-color: var(--accent-brown); background: rgba(207, 189, 168, 0.12); color: var(--text-cream); font-weight: 600; }
 
-        /* Fazladan Paranteiz Temizlendi */
         .primary-btn {
-            position: relative;
-            z-index: 100 !important;
-            background: var(--accent-brown); 
-            color: var(--bg-main);
-            border: none; 
-            border-radius: 16px; 
-            padding: 16px; 
-            font-size: 1rem; 
-            font-weight: 700;
-            cursor: pointer; 
-            transition: all 0.2s var(--apple-ease); 
-            width: 100%; 
-            margin-top: 10px;
+            background: var(--accent-brown); color: var(--bg-main);
+            border: none; border-radius: 16px; padding: 16px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s var(--apple-ease); width: 100%; margin-top: 10px;
         }
         .primary-btn:active { transform: scale(0.96); }
 
-        /* Ana Uygulama & Sekmeler */
+        /* --- ANA UYGULAMA (LAYER 2) --- */
         .main-app { padding: 0; }
-        .top-bar { padding: 24px 24px 4px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .top-bar { padding: 24px 24px 10px 24px; display: flex; justify-content: space-between; align-items: center; }
         .welcome-text { font-size: 0.9rem; color: var(--accent-brown); font-weight: 600; }
         
-        .view-container { position: relative; flex: 1; overflow: hidden; width: 100%; height: calc(100% - 140px); }
+        /* Menü İçerik Alanı (Sekmeler) */
+        .view-container {
+            position: relative; flex: 1; overflow: hidden;
+            width: 100%; height: calc(100% - 140px);
+        }
         
         .tab-view {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            padding: 10px 24px 100px 24px;
-            overflow-y: auto; opacity: 0; transform: translateX(20px); pointer-events: none;
+            padding: 10px 24px; overflow-y: auto;
+            opacity: 0; transform: translateX(20px); pointer-events: none;
             transition: all 0.5s var(--apple-ease);
         }
         .tab-view.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
         .tab-view.prev { transform: translateX(-20px); }
 
-        /* Profil / Hakkında */
+        /* Sekme İçerikleri Tasarımı */
+        /* 1. Profil */
         .profile-header { text-align: center; margin-top: 10px; }
         .avatar-lg { width: 96px; height: 96px; border-radius: 32px; background: var(--accent-green); border: 2px solid var(--accent-brown); margin: 0 auto 16px auto; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 800; color: var(--text-cream); }
         .name-lg { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
         .age-badge { display: inline-block; background: rgba(207, 189, 168, 0.1); color: var(--accent-brown); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-top: 8px; }
         .bio-text { text-align: center; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-top: 16px; }
 
-        .section-title { font-size: 1.1rem; font-weight: 700; margin-top: 10px; margin-bottom: 16px; color: var(--text-cream); display: flex; align-items: center; gap: 8px; }
+        /* 2. Hobiler */
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text-cream); display: flex; align-items: center; gap: 8px; }
         .hobby-grid { display: flex; flex-wrap: wrap; gap: 10px; }
         .hobby-chip { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; font-weight: 500; }
         .hobby-chip i { color: var(--accent-brown); }
         .music-card { background: linear-gradient(135deg, rgba(46, 82, 56, 0.3) 0%, rgba(12, 20, 14, 0.1) 100%); border: 1px solid var(--card-border); padding: 16px; border-radius: 20px; margin-top: 20px; display: flex; align-items: center; gap: 16px; }
         .music-icon { width: 40px; height: 40px; background: var(--accent-brown); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-main); font-size: 1.2rem; }
 
-        /* Duman Kartı */
-        .cat-card { width: 100%; border-radius: 20px; overflow: hidden !important; border: 1px solid var(--card-border); background: rgba(12, 20, 14, 0.6); }
-        .cat-img { width: 100%; height: 210px; object-fit: cover; display: block; border-radius: 20px 20px 0 0; }
-        .cat-info { padding: 14px 16px; background: rgba(12, 20, 14, 0.95); border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .cat-name { font-size: 1.2rem; font-weight: 700; color: var(--text-cream); }
-        .cat-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+        /* 3. Duman (Kedi) */
+        /* Duman Kartı ve Resim Düzeltmesi */
+.cat-card { 
+    width: 100%; 
+    border-radius: 20px; 
+    overflow: hidden; 
+    border: 1px solid var(--card-border); 
+    background: rgba(12, 20, 14, 0.6);
+    margin-bottom: 80px; /* Alt menünün üstünü kapatmaması için boşluk */
+}
 
-        /* Apple Style Toggle Switch */
-        .anon-option { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; cursor: pointer; user-select: none; }
-        .switch { position: relative; display: inline-block; width: 44px; height: 26px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.08); transition: .3s var(--apple-ease); border-radius: 24px; border: 1px solid var(--card-border); }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: var(--text-muted); transition: .3s var(--apple-ease); border-radius: 50%; }
-        input:checked + .slider { background-color: var(--accent-green); border-color: var(--accent-brown); }
-        input:checked + .slider:before { transform: translateX(18px); background-color: var(--accent-brown); }
+.cat-img { 
+    width: 100%; 
+    height: 200px; /* Sabit yükseklik vererek taşmayı engelledik */
+    object-fit: cover; /* Resmi kırpmadan/bozmadan sığdırır */
+    display: block; 
+}
 
+.cat-info { 
+    padding: 14px 16px; 
+    background: rgba(12, 20, 14, 0.95); 
+    border-top: 1px solid rgba(255, 255, 255, 0.05); 
+}
+        
         /* Alt Navigasyon Barı */
         .bottom-nav {
-            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 40px); height: 60px; background: var(--nav-bg); backdrop-filter: blur(20px);
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 48px); height: 64px;
+            background: var(--nav-bg); backdrop-filter: blur(20px);
             border: 1px solid var(--card-border); border-radius: 24px;
-            display: flex; justify-content: space-around; align-items: center; padding: 0 10px; z-index: 5;
+            display: flex; justify-content: space-around; align-items: center; padding: 0 10px;
         }
         .nav-item {
-            width: 48px; height: 48px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
-            color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: all 0.3s var(--apple-ease);
+            width: 48px; height: 48px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 1.2rem; cursor: pointer;
+            transition: all 0.3s var(--apple-ease);
         }
         .nav-item.active { background: rgba(207, 189, 168, 0.15); color: var(--accent-brown); transform: translateY(-2px); }
 
+        /* Mesaj Ekstraları */
+        .anon-switch { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
         .status-msg { text-align: center; font-size: 0.85rem; margin-top: 8px; min-height: 20px; }
         .error-txt { color: #e57373; } .success-txt { color: #81c784; }
-
-        /* Giriş Animasyonu */
-        .anim-pop { animation: popUp 0.9s var(--apple-ease) forwards; }
-        @keyframes popUp {
-            0% { transform: translateY(100vh) scale(0.5); border-radius: 50%; opacity: 0; }
-            60% { transform: translateY(-10px) scale(1.02); opacity: 1; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Arka Plan Canlı Gradyan Animasyonu -->
-    <div class="bg-animated">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
     <div id="appContainer" class="app-container">
         
+        <!-- KATMAN 1: İLK GİRİŞ EKRANI -->
         <div id="layerIntro" class="layer intro-content">
             <h2 class="intro-title">Hoş Geldin 👋</h2>
             
@@ -236,6 +242,7 @@
             <div id="introError" class="status-msg error-txt"></div>
         </div>
 
+        <!-- KATMAN 2: ANA UYGULAMA (GİZLİ BAŞLAR) -->
         <div id="layerMain" class="layer main-app hidden">
             
             <div class="top-bar">
@@ -245,15 +252,17 @@
 
             <div class="view-container">
                 
+                <!-- SEKME 1: PROFİL -->
                 <div id="tab-home" class="tab-view active">
                     <div class="profile-header">
                         <div class="avatar-lg">AP</div>
                         <h1 class="name-lg">Benim Hakkımda</h1>
                         <div class="age-badge">14 Yaşındayım</div>
                     </div>
-                    <p class="bio-text">Daha çok dijital ortamda gezinirim, kodlama ve oyun oynama hobimde burdan geliyor. Fiziksel ortama gelince ise basketbol, tırmanma, bisiklet sürmek gibi bir sürü hobim var.</p>
+                    <p class="bio-text">Daha çok dijital ortamda gezinirim, kodlama ve oyun oynama hobimde burdan geliyor,fiziksel ortama gelince ise diger bir suru hobilerim var(basketbol,tırmanma,bisiklet sürmek gibi.</p>
                 </div>
 
+                <!-- SEKME 2: HAKKINDA / HOBİLER -->
                 <div id="tab-about" class="tab-view">
                     <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Nelerle ilgilenirim?</h3>
                     <div class="hobby-grid">
@@ -273,10 +282,11 @@
                     </div>
                 </div>
 
+                <!-- SEKME 3: DUMAN (KEDİ) -->
                 <div id="tab-duman" class="tab-view">
                     <h3 class="section-title"><i class="fa-solid fa-paw"></i> Hayatımın Patronu</h3>
-                    <div class="cat-card">
-                        <img src="https://i.ibb.co/Lh5F6yPY/image.jpg" alt="Kedim Duman" class="cat-img">
+                    <img src="https://i.ibb.co/Lh5F6yPY/image.jpg" alt="Kedim Duman" class="cat-img">
+                
                         <div class="cat-info">
                             <div class="cat-name">Duman</div>
                             <div class="cat-desc">Onu çok severim. Ailenin en relax üyesi.</div>
@@ -284,24 +294,23 @@
                     </div>
                 </div>
 
+                <!-- SEKME 4: MESAJ -->
                 <div id="tab-message" class="tab-view">
-                    <h3 class="section-title"><i class="fa-solid fa-paper-plane"></i> Bana yaz 📨</h3>
+                    <h3 class="section-title"><i class="fa-solid fa-paper-plane"></i> Bana yaz📨</h3>
                     <textarea id="userMessage" class="textarea-field" style="height: 120px; resize: none;" placeholder="Düşüncelerini veya söylemek istediğini yaz..." maxlength="500"></textarea>
                     
-                    <label class="anon-option">
+                    <div class="anon-switch">
                         <span style="font-size: 0.85rem; color: var(--text-muted);">İsmimi gizle (Anonim)</span>
-                        <div class="switch">
-                            <input type="checkbox" id="anonCheck">
-                            <span class="slider"></span>
-                        </div>
-                    </label>
+                        <input type="checkbox" id="anonCheck" style="width: 20px; height: 20px; accent-color: var(--accent-brown);">
+                    </div>
 
-                    <button class="primary-btn" onclick="sendMessage()">Mesajı Gönder</button>
+                    <button class="primary-btn" onclick="sendMessage()">Mesajı gönder</button>
                     <div id="statusMsg" class="status-msg"></div>
                 </div>
 
             </div>
 
+            <!-- ALT MENÜ -->
             <nav class="bottom-nav">
                 <div class="nav-item active" onclick="switchTab('home', this)"><i class="fa-solid fa-user"></i></div>
                 <div class="nav-item" onclick="switchTab('about', this)"><i class="fa-solid fa-layer-group"></i></div>
@@ -311,93 +320,88 @@
 
         </div>
     </div>
-
-    <script>
+        <script>
+        // BURAYA KENDİ DISCORD WEBHOOK URL'Nİ YAPIŞTIR
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1566215429138153593/LF8GKWR96Z8AvD8KlZOIIGn_Hz8XDRIJjpsSf7h9IKs_ryW0Y5xV66ROqfLtPVnQgk0-";
         let metPoyrazValue = "Evet";
 
         window.addEventListener('DOMContentLoaded', () => {
             const app = document.getElementById('appContainer');
-            let savedName = null;
-
-            try { savedName = localStorage.getItem('visitor_name'); } catch(e) {}
+            const savedName = localStorage.getItem('visitor_name');
 
             if (savedName) {
+                // Önceden girilmişse, doğrudan geniş uygulamaya geç
                 app.classList.add('expanded');
                 document.getElementById('layerIntro').classList.add('hidden');
                 document.getElementById('layerMain').classList.remove('hidden');
                 document.getElementById('welcomeHeading').innerText = `Hoş geldin, ${savedName} 👋`;
             } else {
+                // İlk defa giriliyorsa animasyonlu karşılama
                 app.classList.add('anim-pop');
             }
         });
 
+        // Radyo Buton Mantığı
         function selectRadio(element, value) {
             document.querySelectorAll('.radio-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
             metPoyrazValue = value;
         }
 
+        // Karşılama Ekranını Tamamlama
         function completeIntro() {
-            const inputEl = document.getElementById('introName');
+            const nameInput = document.getElementById('introName').value.trim();
             const errorTxt = document.getElementById('introError');
-            const nameInput = inputEl ? inputEl.value.trim() : "";
 
             if (!nameInput) {
-                if (errorTxt) errorTxt.innerText = "Devam etmek için adını yazmalısın.";
+                errorTxt.innerText = "Devam etmek için adını girmelisin.";
                 return;
             }
 
-            if (errorTxt) errorTxt.innerText = "";
-            
-            try {
-                localStorage.setItem('visitor_name', nameInput);
-                localStorage.setItem('met_poyraz', typeof metPoyrazValue !== 'undefined' ? metPoyrazValue : 'Evet');
-            } catch(e) {}
+            errorTxt.innerText = "";
+            localStorage.setItem('visitor_name', nameInput);
+            localStorage.setItem('met_poyraz', metPoyrazValue);
 
             const layerIntro = document.getElementById('layerIntro');
             const layerMain = document.getElementById('layerMain');
             const app = document.getElementById('appContainer');
-            const welcomeHeading = document.getElementById('welcomeHeading');
 
-            if (welcomeHeading) welcomeHeading.innerText = `Katıldın, ${nameInput} 🚀`;
+            layerIntro.style.opacity = '0';
 
-            if (layerIntro) {
-                layerIntro.style.display = 'none';
+            setTimeout(() => {
                 layerIntro.classList.add('hidden');
-            }
-
-            if (app) app.classList.add('expanded');
-
-            if (layerMain) {
-                layerMain.style.display = 'flex';
-                layerMain.classList.remove('hidden');
-                layerMain.style.opacity = '1';
-                layerMain.style.pointerEvents = 'all';
-            }
+                app.classList.add('expanded'); // Kutu genişler
+                
+                setTimeout(() => {
+                    layerMain.classList.remove('hidden');
+                    document.getElementById('welcomeHeading').innerText = `Katıldın, ${nameInput} 🚀`;
+                }, 300);
+            }, 400);
         }
 
+        // Menü (Sekme) Geçiş Motoru
         function switchTab(tabName, navElement) {
+            // Aktif ikonu değiştir
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             navElement.classList.add('active');
 
             const allTabs = document.querySelectorAll('.tab-view');
             
+            // Tüm sekmeleri sola kaydırıp gizle
             allTabs.forEach(tab => {
-                           allTabs.forEach(tab => {
                 tab.classList.remove('active');
                 tab.classList.add('prev');
             });
 
+            // Seçilen sekmeyi sağdan getir ve aktif yap
             setTimeout(() => {
                 const target = document.getElementById(`tab-${tabName}`);
-                if (target) {
-                    target.classList.remove('prev');
-                    target.classList.add('active');
-                }
+                target.classList.remove('prev');
+                target.classList.add('active');
             }, 50);
         }
 
+        // Discord Webhook Mesaj Gönderme
         async function sendMessage() {
             const messageInput = document.getElementById('userMessage').value.trim();
             const isAnon = document.getElementById('anonCheck').checked;
@@ -409,13 +413,8 @@
                 return;
             }
 
-            let savedName = "İsimsiz";
-            let metInfo = "Bilinmiyor";
-            try {
-                savedName = localStorage.getItem('visitor_name') || "İsimsiz";
-                metInfo = localStorage.getItem('met_poyraz') || "Bilinmiyor";
-            } catch(e) {}
-
+            const savedName = localStorage.getItem('visitor_name') || "İsimsiz";
+            const metInfo = localStorage.getItem('met_poyraz') || "Bilinmiyor";
             let senderName = isAnon ? "Anonim 🥷" : savedName;
 
             statusMsg.className = "status-msg";
