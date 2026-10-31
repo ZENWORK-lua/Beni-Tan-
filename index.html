@@ -452,6 +452,23 @@
                 statusMsg.innerText = "Bağlantı hatası. Mesaj gitmedi.";
             }
         }
+            { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok || response.status === 204) {
+                    statusMsg.className = "status-msg success-txt";
+                    statusMsg.innerText = "Mesajın başarıyla fırlatıldı!";
+                    document.getElementById('userMessage').value = "";
+                } else throw new Error();
+            } catch (err) {
+                statusMsg.className = "status-msg error-txt";
+                statusMsg.innerText = "Bağlantı hatası. Mesaj gitmedi.";
+            }
+        }
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
